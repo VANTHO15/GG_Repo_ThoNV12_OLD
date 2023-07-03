@@ -1,3 +1,17 @@
+# ThoNV begin
+Bước 1: copy folder bin bỏ vào C:\Users\thonv12
+Bước 2:  vào env sửa path và them đường dẫn vào
+![image](https://github.com/VANTHO15/GG_Repo_ThoNV12/assets/56969447/342bf754-fe44-4461-b769-ca7367a4dbf8)
+Bước 3: Tạo 1 folder bất kì, vào cmd
+Bước 4: gõ đường dẫn bên dưới vào để tải source và liên kết repo, -b là branch gì, -m là trỏ tới manifest xml
++ repo init -u https://github.com/VANTHO15/GG_Central_Repo_XML.git -b main -m ThoNV.xml --no-clone-bundle
++ Khi này cần đăng nhập thì user và pass
+Bước 5:  Mình cần tải folder nào về thì tải thôi, lệnh như dưới
+repo sync --no-clone-bundle -d docs
+repo sync --no-clone-bundle -d port test_port
+# ThoNV begin
+
+
 # repo
 
 Repo is a tool built on top of Git.  Repo helps manage many Git repositories,
