@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+# Copyright 2019 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Wrapper to run pytest with the right settings."""
+
+import errno
+import os
+import shutil
+import subprocess
+import sys
+
+
+def find_pytest():
+  """Try to locate a good version of pytest."""
+  # If we're in a virtualenv, assume that it's provided the right pytest.
+  if 'VIRTUAL_ENV' in os.environ:
+    return 'pytest'
+
+  # Use the Python 3 version if available.
+  ret = shutil.which('pytest-3')
+  if ret:
+    return ret
+
+  # Hopefully this is a Python 3 version.
+  ret = shutil.which('pytest')
+  if ret:
+    return ret
+
+  print('%s: unable to find pytest.' % (__file__,), file=sys.stderr)
+  print('%s: Try installing: sudo apt-get install python-pytest' % (__file__,),
+        file=sys.stderr)
+
+
+def main(argv):
+  """The main entry."""
+  # Add the repo tree to PYTHONPATH as the tests expect to be able to import
+  # modules directly.
+  pythonpath = os.path.dirname(os.path.realpath(__file__))
+  oldpythonpath = os.environ.get('PYTHONPATH', None)
+  if oldpythonpath is not None:
+    pythonpath += os.pathsep + oldpythonpath
+  os.environ['PYTHONPATH'] = pythonpath
+
+  pytest = find_pytest()
+  return subprocess.run([pytest] + argv, check=False).returncode
+
+
+if __name__ == '__main__':
+  sys.exit(main(sys.argv[1:]))
